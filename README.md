@@ -12,3 +12,4 @@ Deve ter:
     - Edição das informações do produto <PUT/PATCH>
     - Exclusão do produto <DELETE>
 
+Fazer os testes das requisições usando o programa Postman para verificar se está tudo OK
