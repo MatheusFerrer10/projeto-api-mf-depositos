@@ -56,8 +56,33 @@ def cadastrar_produtos():
     sql.execute(consulta, itens)
     conn.commit()
     sql.close()
-    
-    return jsonify({"mensagem": "Produto cadastrado com sucesso"}), 201
+    return jsonify({"mensagem": "Produto cadastrado com sucesso!"}), 201
+
+@app.route("/produtos/<int:id>", methods=["PUT"])
+def atualizar_produtos(id):
+    informacoes_do_front = request.get_json()
+    nome = informacoes_do_front.get("nome")
+    marca = informacoes_do_front.get("marca")
+    unidade = informacoes_do_front.get("unidade")
+    valor = informacoes_do_front.get("valor")
+    qtde = informacoes_do_front.get("qtde")
+    sql = conn.cursor(dictionary=True)
+    consulta = f"UPDATE produtos SET nome = %s, marca = %s, unidade = %s, valor = %s, qtde = %s WHERE id = %s"
+    itens = (nome, marca, unidade, valor, qtde, id)
+    sql.execute(consulta, itens)
+    conn.commit()
+    sql.close()
+    return jsonify({"mensagem": "Produto atualizado com sucesso!"}), 201
+
+@app.route("/produtos/<int:id>", methods=["DELETE"])
+def deletar_produtos(id):
+    sql = conn.cursor(dictionary=True)
+    consulta = f"DELETE FROM produtos WHERE id = %s"
+    itens = (id,)
+    sql.execute(consulta, itens)
+    conn.commit()
+    sql.close()
+    return jsonify({"mensagem": "Produto deletado com sucesso!"}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
