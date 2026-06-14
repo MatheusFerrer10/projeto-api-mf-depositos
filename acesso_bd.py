@@ -1,4 +1,4 @@
-conexao = {
+acesso_bd = {
     "host": "localhost",
     "database": "mf_deposito",
     "user": "root",
