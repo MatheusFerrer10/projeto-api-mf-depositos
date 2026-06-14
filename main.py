@@ -29,13 +29,12 @@ def visualizar_produtos():
     return jsonify(lista_produtos)
 
 # VISUALIZAÇÃO DE PRODUTOS POR NOME/MARCA
-@app.route("/produtos", methods=["GET"])
+@app.route("/produtos/", methods=["GET"])
 def visualizar_produto_por_nome_marca():
-    informacoes_do_front = request.get_json()
-    busca = informacoes_do_front.get("busca")
+    busca = request.args.get("busca")
     sql = conn.cursor(dictionary=True)
-    consulta = f"SELECT * FROM produtos WHERE nome LIKE '%" + "%s%" + "' OR marca LIKE '%" + "%s"+ "%'"
-    itens = (busca, busca)
+    consulta = f"SELECT * FROM produtos WHERE nome LIKE %s OR marca LIKE %s"
+    itens = (f"%{busca}%", f"%{busca}%")
     sql.execute(consulta, itens)
     lista_produtos = sql.fetchall()
     sql.close()
@@ -58,6 +57,7 @@ def cadastrar_produtos():
     sql.close()
     return jsonify({"mensagem": "Produto cadastrado com sucesso!"}), 201
 
+# EDIÇÃO DE PRODUTOS
 @app.route("/produtos/<int:id>", methods=["PUT"])
 def atualizar_produtos(id):
     informacoes_do_front = request.get_json()
@@ -74,6 +74,7 @@ def atualizar_produtos(id):
     sql.close()
     return jsonify({"mensagem": "Produto atualizado com sucesso!"}), 201
 
+# EXCLUSÃO DE PRODUTOS
 @app.route("/produtos/<int:id>", methods=["DELETE"])
 def deletar_produtos(id):
     sql = conn.cursor(dictionary=True)
